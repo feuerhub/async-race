@@ -1,0 +1,19 @@
+.carTrack {
+    padding: 1rem 0;
+    border-bottom: 0.1rem solid white;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    .leftContainer {
+        display: flex;
+        gap: 0.5rem;
+        .btnContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+        svg {
+            height: 5rem;
+        }
+    }
+}

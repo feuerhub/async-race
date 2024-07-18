@@ -1,37 +1,13 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
-
-type Car = {
-    name: string;
-    color: string;
-    id: number;
-};
-type GarageState = {
-  entities: Car[];
-  loading: 'idle' | 'pending' | 'succeeded' | 'failed';
-  error?: string;
-};
+import { createCar, getCars } from './garageThunks';
+import { Car, GarageState } from './garageTypes';
 
 const initialState: GarageState = {
     entities: [],
     loading: 'idle',
 };
 
-export const getCars = createAsyncThunk<Car[], void, { state: RootState }>(
-    'garage/getCars',
-      async function (_, { rejectWithValue }) {
-        try {
-          const response = await fetch('http://127.0.0.1:3000/garage');
-          if (!response.ok) {
-            throw new Error('Server Error!');
-          }
-          const data = await response.json();
-          return data;
-        } catch (error) {
-          return rejectWithValue(error);
-        }
-      }
-    );
 
 const garageSlice = createSlice({
   name: 'garage',
@@ -47,6 +23,18 @@ const garageSlice = createSlice({
         state.entities = action.payload;
       });
       builder.addCase(getCars.rejected, (state, action) => {
+        state.loading = 'failed';
+        state.error = action.payload as string;
+      });
+      builder.addCase(createCar.pending, (state) => {
+        state.loading = 'pending';
+        state.error = undefined;
+      });
+      builder.addCase(createCar.fulfilled, (state, action: PayloadAction<Car>) => {
+        state.loading = 'succeeded';
+        state.entities.push(action.payload);
+      });
+      builder.addCase(createCar.rejected, (state, action) => {
         state.loading = 'failed';
         state.error = action.payload as string;
       });

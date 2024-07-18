@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 import { AppDispatch } from "./app/store";
 import { getWinners } from "./features/winners/winnersSlice";
-import { getCars } from "./features/garage/garageSlice";
+import { getCars } from "./features/garage/garageThunks";
 import { Header } from "./components";
 import { Garage, Winners } from "./views";
 

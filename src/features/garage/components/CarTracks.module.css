@@ -1,0 +1,12 @@
+.carTracks {
+    margin: 1rem 0;
+    .top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .topLeftBtns {
+            display: flex;
+            gap: 1rem;
+        }
+    }
+}
