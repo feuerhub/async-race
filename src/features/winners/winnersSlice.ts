@@ -1,27 +1,27 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 
-type Car = {
-    name: string;
-    color: string;
+type Winner = {
     id: number;
+    wins: number;
+    time: number;
 };
-type GarageState = {
-  entities: Car[];
+type WinnersState = {
+  entities: Winner[];
   loading: 'idle' | 'pending' | 'succeeded' | 'failed';
   error?: string;
 };
 
-const initialState: GarageState = {
+const initialState: WinnersState = {
     entities: [],
     loading: 'idle',
 };
 
-export const getCars = createAsyncThunk<Car[], void, { state: RootState }>(
-    'garage/getCars',
+export const getWinners = createAsyncThunk<Winner[], void, { state: RootState }>(
+    'winners/getWinners',
       async function (_, { rejectWithValue }) {
         try {
-          const response = await fetch('http://127.0.0.1:3000/garage');
+          const response = await fetch('http://127.0.0.1:3000/winners');
           if (!response.ok) {
             throw new Error('Server Error!');
           }
@@ -33,25 +33,25 @@ export const getCars = createAsyncThunk<Car[], void, { state: RootState }>(
       }
     );
 
-const garageSlice = createSlice({
-  name: 'garage',
+const winnersSlice = createSlice({
+  name: 'winners',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getCars.pending, (state) => {
+    builder.addCase(getWinners.pending, (state) => {
         state.loading = 'pending';
         state.error = undefined;
       });
-      builder.addCase(getCars.fulfilled, (state, action: PayloadAction<Car[]>) => {
+      builder.addCase(getWinners.fulfilled, (state, action: PayloadAction<Winner[]>) => {
         state.loading = 'succeeded';
         state.entities = action.payload;
       });
-      builder.addCase(getCars.rejected, (state, action) => {
+      builder.addCase(getWinners.rejected, (state, action) => {
         state.loading = 'failed';
         state.error = action.payload as string;
       });
   },
 });
 
-export default garageSlice.reducer;
-export const selectAllCars = (state: RootState) => state.garage.entities;
+export default winnersSlice.reducer;
+export const selectAllWinners = (state: RootState) => state.winners.entities;

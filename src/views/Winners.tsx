@@ -1,3 +1,7 @@
+import { WinnersTable } from '../features/winners/components/WinnersTable'
+
 export function Winners() {
-    return <main>Winners</main>;
+    return <main>
+        <WinnersTable />
+    </main>;
 }

@@ -1,3 +1,5 @@
+import styles from './Button.module.css';
+
 type ButtonProps = {
     btnText: string,
     type: "submit" | "reset" | "button" | undefined
@@ -5,5 +7,5 @@ type ButtonProps = {
 }
 
 export function Button({ btnText, type, onClick }: ButtonProps) {
-    return <button onClick={onClick} type={type}>{ btnText }</button>;
+    return <button onClick={onClick} type={type} className={styles.button}>{ btnText }</button>;
 }
