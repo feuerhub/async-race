@@ -1,6 +1,6 @@
 .header {
-    background-color: antiquewhite;
-    /* height: 4rem; */
+    /* background-color: antiquewhite; */
+    margin-bottom: 1rem;
     padding: 0.5rem 12rem;
     display: flex;
     align-items: center;

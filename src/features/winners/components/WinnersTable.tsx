@@ -3,6 +3,7 @@ import { selectAllWinners } from "../winnersSlice";
 import { selectAllCars } from "../../garage/garageSlice";
 
 import styles from './WinnersTable.module.css';
+import { CarIcon } from "../../../components/CarIcon/CarIcon";
 
 export function WinnersTable() {
     const winners = useSelector(selectAllWinners);
@@ -26,7 +27,7 @@ export function WinnersTable() {
                 {filteredCars.map(item => {
                     return <tr key={item.id}>
                         <td>{item.id}</td>
-                        <td>{item.color}</td>
+                        <td>{<CarIcon color={item.color} />}</td>
                         <td>{item.name}</td>
                         <td>{item.wins}</td>
                         <td>{item.time}</td>

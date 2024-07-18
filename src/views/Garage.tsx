@@ -1,5 +1,10 @@
+import { CarTrack } from "../features/garage/components/CarTrack";
+
+import styles from './Garage.module.css';
+
 export function Garage() {
-    return <main>
-        
+    return <main className={styles.garage}>
+        <h4>Garage</h4>
+        <CarTrack />
     </main>;
 }
