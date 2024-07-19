@@ -1,10 +1,11 @@
 .carTracks {
     margin: 1rem 0;
-    .top {
+    .btnPanel {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        .topLeftBtns {
+        margin: 1rem 0;
+        .btnPanelLeft {
             display: flex;
             gap: 1rem;
         }

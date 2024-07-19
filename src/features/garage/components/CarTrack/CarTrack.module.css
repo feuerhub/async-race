@@ -16,4 +16,16 @@
             height: 5rem;
         }
     }
+    .trackroad {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        p {
+            color: gray;
+        }
+        .carName {
+            margin-top: 1rem;
+        }
+    }
 }

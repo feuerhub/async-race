@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 import { CarTrack } from "../CarTrack/CarTrack";
 import { selectAllCars } from "../../garageSlice";
 import { Button } from "../../../../components";
@@ -10,7 +11,9 @@ import { UpdateCarForm } from "../UpdateCarForm/UpdateCarForm";
 
 import styles from './CarTracks.module.css';
 
+
 export function CarTracks() {
+    const [selectedCar, setSelectedCar] = useState<null | number>(null);
     const dispatch = useDispatch<AppDispatch>();
     const handleGenerateCars = () => {
         const randomCars = generateRandomCars(5);
@@ -20,17 +23,24 @@ export function CarTracks() {
     }
     const cars = useSelector(selectAllCars);
     return <div className={styles.carTracks}>
-        <div className={styles.top}>
-            <div className={styles.topLeftBtns}>
+        <div className={styles.btnPanel}>
+            <div className={styles.btnPanelLeft}>
                 <Button btnText="RACE" type="button" />
                 <Button btnText="RESET" type="button" />
             </div>
             <CreateCarForm />
-            <UpdateCarForm />
+            <UpdateCarForm selectedCar={selectedCar} />
             <Button btnText="GENERATE CARS" type="button" onClick={handleGenerateCars} />
         </div>
         <div>
-            {cars.map(car => <CarTrack key={car.id} name={car.name} color={car.color} />)}
+            {cars.map(car => 
+            <CarTrack 
+            key={car.id} 
+            id={car.id}
+            name={car.name} 
+            color={car.color} 
+            selected={selectedCar === car.id} 
+            onClickSelect={() => setSelectedCar(car.id)} />)}
         </div>
     </div>;
 }

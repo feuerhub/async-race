@@ -1,17 +1,23 @@
 import { useState } from 'react';
 import { Form } from '../../../../components/';
-// import { useDispatch } from 'react-redux';
+import { updateCar } from '../../garageThunks';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../../app/store';
 
-export function UpdateCarForm() {
+type UpdateCarFormProps = {
+  selectedCar: number | null
+}
+
+export function UpdateCarForm({selectedCar}: UpdateCarFormProps) {
   const [carUpdateText, setCarUpdateText] = useState('');
   const [carUpdateColor, setCarUpdateColor] = useState('#000000');
 
-//   const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>();
 
-  const handleCreateCar: React.FormEventHandler<HTMLFormElement> = (e) => {
+  const handleUpdateCar: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    if (carUpdateText) {
-        // dispatch(updateCar({name: carCreateText, color: carCreateColor}));
+    if (carUpdateText && selectedCar) {
+        dispatch(updateCar({carId: selectedCar, carData: {name: carUpdateText, color: carUpdateColor}}));
         setCarUpdateText('');
         setCarUpdateColor('#000000');
     }
@@ -29,7 +35,7 @@ export function UpdateCarForm() {
     <Form
       inputPlaceholder="Type Car Brand"
       btnText="UPDATE"
-      onSubmit={handleCreateCar}
+      onSubmit={handleUpdateCar}
       textValue={carUpdateText}
       onInputText={handleInputText}
       colorValue={carUpdateColor}
