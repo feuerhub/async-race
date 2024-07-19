@@ -1,4 +1,4 @@
-import { CarTracks } from "../features/garage/components/CarTracks";
+import { CarTracks } from "../features/garage/components/CarTracks/CarTracks";
 
 import styles from './Garage.module.css';
 

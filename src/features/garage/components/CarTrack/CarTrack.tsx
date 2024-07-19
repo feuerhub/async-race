@@ -1,5 +1,5 @@
-import { CarIcon } from "../../../components/CarIcon/CarIcon";
-import { Button } from "../../../components";
+import { CarIcon } from "../../../../components/CarIcon/CarIcon";
+import { Button } from "../../../../components";
 
 import styles from './CarTrack.module.css';
 
