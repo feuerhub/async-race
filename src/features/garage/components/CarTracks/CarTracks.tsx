@@ -10,30 +10,42 @@ import { CreateCarForm } from "../CreateCarForm/CreateCarForm";
 import { UpdateCarForm } from "../UpdateCarForm/UpdateCarForm";
 
 import styles from './CarTracks.module.css';
+import { Pagination } from "../../../../components/Pagination/Pagination";
 
 
 export function CarTracks() {
     const [selectedCar, setSelectedCar] = useState<null | number>(null);
+    const [page, setPage] = useState<number>(1);
     const dispatch = useDispatch<AppDispatch>();
-    const handleGenerateCars = () => {
+    const cars = useSelector(selectAllCars);
+
+    const handleOnClickGenerateCars = () => {
         const randomCars = generateRandomCars(5);
         randomCars.forEach(
             car => dispatch(createCar(car))
         );
     }
-    const cars = useSelector(selectAllCars);
+    // const handleSetPage = (pageNumber: number) => {
+    //     setPage()
+    // }
+
+    const itemsPerPage = 10;
+    const totalPages = Math.ceil(cars.length / itemsPerPage);
+    const startIndex = (page-1) * itemsPerPage;
+    const paginatedCars = cars.slice(startIndex, startIndex + itemsPerPage);  
+
     return <div className={styles.carTracks}>
         <div className={styles.btnPanel}>
             <div className={styles.btnPanelLeft}>
                 <Button btnText="RACE" type="button" />
-                <Button btnText="RESET" type="button" />
+                <Button btnText="RESET" type="button" onClick={() => location.reload()} />
             </div>
             <CreateCarForm />
             <UpdateCarForm selectedCar={selectedCar} />
-            <Button btnText="GENERATE CARS" type="button" onClick={handleGenerateCars} />
+            <Button btnText="GENERATE CARS" type="button" onClick={handleOnClickGenerateCars} />
         </div>
         <div>
-            {cars.map(car => 
+            {paginatedCars.map(car => 
             <CarTrack 
             key={car.id} 
             id={car.id}
@@ -42,5 +54,6 @@ export function CarTracks() {
             selected={selectedCar === car.id} 
             onClickSelect={() => setSelectedCar(car.id)} />)}
         </div>
+        <Pagination page={page} totalPages={totalPages} setPage={setPage} />
     </div>;
 }

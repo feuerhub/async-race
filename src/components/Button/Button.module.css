@@ -4,7 +4,8 @@
     padding: 0.5rem;
     color: var(--font-color);
     &:disabled {
-        border: 0.2rem solid white;
+        border: 0.2rem solid gray;
+        color: gray;
     }
     &:hover {
         border: 0.2rem solid gray;

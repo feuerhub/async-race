@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { EngineState } from './engineTypes';
 import { startStopEngine } from './engineThunks';
+import { RootState } from '../../app/store';
 
 const initialState: EngineState = {
     entities: [],
@@ -18,12 +19,17 @@ const engineState = createSlice({
       });
       builder.addCase(startStopEngine.fulfilled, (state, action) => {
         state.loading = 'succeeded';
-        if (action.payload.status === 'stopped'){
+        if (action.payload.status === 'stopped') {
             state.entities = state.entities.filter(engine => engine.id !== action.payload.data.id);
         } else {
-            state.entities.push(action.payload.data)
+            const index = state.entities.findIndex(engine => engine.id === action.payload.data.id);
+            if (index !== -1) {
+                state.entities[index] = action.payload.data;
+            } else {
+                state.entities.push(action.payload.data);
+            }
         }
-      });
+    });
       builder.addCase(startStopEngine.rejected, (state, action) => {
         state.loading = 'failed';
         state.error = action.payload as string;
@@ -32,3 +38,4 @@ const engineState = createSlice({
 });
 
 export default engineState.reducer;
+export const selectAllEngineStatuses = (state: RootState) => state.engine.entities;
