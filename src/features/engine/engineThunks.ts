@@ -21,7 +21,7 @@ export const startStopEngine = createAsyncThunk<
   });
 
 export const switchToDriveMode = createAsyncThunk<
-    number, 
+    {id: number, drive: 'broke' | 'drive'}, 
     number, 
     {state: RootState }>(
     'engine/switchToDriveMode', 
@@ -30,7 +30,9 @@ export const switchToDriveMode = createAsyncThunk<
             method: 'PATCH'
         });
         if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
+            // throw new Error(`Response status: ${response.status}`);
+            return {id: carId, drive: 'broke'};
         }
-        return carId;
+        const data = await response.json();
+        return {id: carId, drive: 'drive'};
       });

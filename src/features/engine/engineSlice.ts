@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { EngineState } from './engineTypes';
-import { startStopEngine } from './engineThunks';
+import { startStopEngine, switchToDriveMode } from './engineThunks';
 import { RootState } from '../../app/store';
 
 const initialState: EngineState = {
@@ -24,13 +24,28 @@ const engineState = createSlice({
         } else {
             const index = state.entities.findIndex(engine => engine.id === action.payload.data.id);
             if (index !== -1) {
-                state.entities[index] = action.payload.data;
+                state.entities[index] = {...action.payload.data, status: 'started'};
             } else {
-                state.entities.push(action.payload.data);
+                state.entities.push({...action.payload.data, status: 'started'});
             }
         }
     });
       builder.addCase(startStopEngine.rejected, (state, action) => {
+        state.loading = 'failed';
+        state.error = action.payload as string;
+      });
+      builder.addCase(switchToDriveMode.pending, (state) => {
+        state.loading = 'pending';
+        state.error = undefined;
+      });
+      builder.addCase(switchToDriveMode.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        const index = state.entities.findIndex(engine => engine.id === action.payload.id);
+            if (index !== -1) {
+                state.entities[index].status = action.payload.drive;
+            }
+    });
+      builder.addCase(switchToDriveMode.rejected, (state, action) => {
         state.loading = 'failed';
         state.error = action.payload as string;
       });
