@@ -34,5 +34,5 @@ export const switchToDriveMode = createAsyncThunk<
             return {id: carId, drive: 'broke'};
         }
         const data = await response.json();
-        return {id: carId, drive: 'drive'};
+        return data.success ? {id: carId, drive: 'drive'} : {id: carId, drive: 'broke'};
       });

@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
 import { EngineState } from './engineTypes';
 import { startStopEngine, switchToDriveMode } from './engineThunks';
 import { RootState } from '../../app/store';
@@ -54,3 +54,12 @@ const engineState = createSlice({
 
 export default engineState.reducer;
 export const selectAllEngineStatuses = (state: RootState) => state.engine.entities;
+
+export const selectAllRaceReady = createSelector(
+    [selectAllEngineStatuses],
+    (engine) => engine.every(item => item.status === 'drive' || 'broke')
+  )
+//   export const selectAllEnginesStarted = createSelector(
+//     [selectAllEngineStatuses],
+//     (engine) => engine.every(item => item.status === 'started')
+//   )

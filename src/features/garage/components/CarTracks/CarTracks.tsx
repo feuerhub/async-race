@@ -11,25 +11,32 @@ import { UpdateCarForm } from "../UpdateCarForm/UpdateCarForm";
 
 import styles from './CarTracks.module.css';
 import { Pagination } from "../../../../components/Pagination/Pagination";
-
+import { startStopEngine, switchToDriveMode } from "../../../engine/engineThunks";
 
 export function CarTracks() {
     const [selectedCar, setSelectedCar] = useState<null | number>(null);
     const [page, setPage] = useState<number>(1);
     const dispatch = useDispatch<AppDispatch>();
     const cars = useSelector(selectAllCars);
-
     const handleOnClickGenerateCars = () => {
         const randomCars = generateRandomCars(5);
         randomCars.forEach(
             car => dispatch(createCar(car))
         );
     }
-    // const handleSetPage = (pageNumber: number) => {
-    //     setPage()
-    // }
+    const handleOnClickEngine = (status: 'started' | 'stopped', id: number) => {
+        dispatch(startStopEngine({ carId: id, status: status }));
+        if (status === 'started') {
+            dispatch(switchToDriveMode(id));
+    }
+    }
+    const handleOnClickRace = () => {
+        paginatedCars.forEach(car => dispatch(startStopEngine({ carId: car.id, status: 'stopped' })));
+        paginatedCars.forEach(car => dispatch(startStopEngine({ carId: car.id, status: 'started' })));
+        paginatedCars.forEach(car => dispatch(switchToDriveMode(car.id)));
+    }
 
-    const itemsPerPage = 10;
+    const itemsPerPage = 7;
     const totalPages = Math.ceil(cars.length / itemsPerPage);
     const startIndex = (page-1) * itemsPerPage;
     const paginatedCars = cars.slice(startIndex, startIndex + itemsPerPage);  
@@ -37,7 +44,7 @@ export function CarTracks() {
     return <div className={styles.carTracks}>
         <div className={styles.btnPanel}>
             <div className={styles.btnPanelLeft}>
-                <Button btnText="RACE" type="button" />
+                <Button btnText="RACE" type="button" onClick={handleOnClickRace} />
                 <Button btnText="RESET" type="button" onClick={() => location.reload()} />
             </div>
             <CreateCarForm />
@@ -52,7 +59,8 @@ export function CarTracks() {
             name={car.name} 
             color={car.color} 
             selected={selectedCar === car.id} 
-            onClickSelect={() => setSelectedCar(car.id)} />)}
+            onClickSelect={() => setSelectedCar(car.id)}
+            handleOnClickEngine={handleOnClickEngine} />)}
         </div>
         <Pagination page={page} totalPages={totalPages} setPage={setPage} />
     </div>;

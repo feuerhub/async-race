@@ -11,8 +11,6 @@ export function Pagination({page, totalPages, setPage}: PaginationProps) {
     const handleOnClickPage = (operation: 'next' | 'prev' | 'first' | 'last') => {
         switch (operation) {
           case 'next':
-            console.log(page)
-            console.log(totalPages)
             if (page === totalPages) {
               break;
             } else {
