@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CarTrack } from "../CarTrack/CarTrack";
 import { selectAllCars } from "../../garageSlice";
 import { Button } from "../../../../components";
@@ -24,11 +24,13 @@ export function CarTracks() {
     const [raceStarted, setRaceStarted] = useState<boolean>(false);
 
     const dispatch = useDispatch<AppDispatch>();
+
     const cars = useSelector(selectAllCars);
     const engines = useSelector(selectAllEngineStatuses);
     const winners = useSelector(selectAllWinners);
+    
     const handleOnClickGenerateCars = () => {
-    const randomCars = generateRandomCars(5);
+        const randomCars = generateRandomCars(5);
         randomCars.forEach(
             car => dispatch(createCar(car))
         );
@@ -42,15 +44,15 @@ export function CarTracks() {
         }
     }
     const handleOnClickRace = () => {
-        setWinner(null);
-        setRaceStarted(true);
         handleOnClickReset();
+        setRaceStarted(true);
         paginatedCars.forEach(car => dispatch(startEngine(car.id)));
         paginatedCars.forEach(car => dispatch(switchToDrive(car.id)));
     }
     const handleOnClickReset = () => {
         setWinner(null);
         engines.forEach(engine => dispatch(stopEngine(engine.id)));
+        setRaceStarted(false);
     }
     const handleGetWinner = (id: number) => {
         if (!winner && raceStarted) {
@@ -60,12 +62,18 @@ export function CarTracks() {
     }
     const addWinnerToWinners = () => {
         const isWinnerInWinners = winners.some((car) => car.id === winner);
+        let finishTime = engines.find(engine => engine.id === winner)?.velocity;
+        finishTime = finishTime ? Math.round(1500 / finishTime) : 0;
         if (isWinnerInWinners && winner) {
-            dispatch(updateWinner({id: winner, time: 10, wins: 1}));
+            dispatch(updateWinner({id: winner, time: finishTime, wins: 1}));
         } else if (!isWinnerInWinners && winner) {
-            dispatch(addWinner({id: winner, time: 10, wins: 1}));
+            dispatch(addWinner({id: winner, time: finishTime, wins: 1}));
         }
     }
+
+    useEffect(() => {
+        addWinnerToWinners();
+      }, [winner]);
 
     const itemsPerPage = 7;
     const totalPages = Math.ceil(cars.length / itemsPerPage);
@@ -75,7 +83,7 @@ export function CarTracks() {
     return <div className={styles.carTracks}>
         <div className={styles.btnPanel}>
             <div className={styles.btnPanelLeft}>
-                <Button btnText="RACE" type="button" onClick={handleOnClickRace} />
+                <Button btnText="RACE" type="button" onClick={handleOnClickRace} disabled={raceStarted} />
                 <Button btnText="RESET" type="button" onClick={handleOnClickReset} />
             </div>
             <CreateCarForm />
