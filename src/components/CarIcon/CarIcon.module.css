@@ -1,9 +1,9 @@
-@keyframes drive {
+/* @keyframes drive {
     0% {
         transform: translateX(0);
     }
     100% {
-        transform: translateX(65vw);
+        transform: translateX(65rem);
     }
 }
 .car {
@@ -15,4 +15,4 @@
 .car.broken {
     animation-play-state: paused;
 }
-
+ */

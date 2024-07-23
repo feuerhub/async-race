@@ -1,13 +1,14 @@
+import { useSelector } from 'react-redux';
 import styles from './Modal.module.css';
+import { selectAllCars } from '../../features/garage/garageSlice';
+import { selectAllEngineStatuses } from '../../features/engine/engineSlice';
 
-type ModalProps = {
-    name: string,
-    time: number
-}
 
-export function Modal({name, time}: ModalProps) {
+export function Modal({id}: {id: number}) {
+    const carName = useSelector(selectAllCars).filter(car => car.id === id)[0].name;
+    const finishTime = Math.round(1000 / useSelector(selectAllEngineStatuses).filter(car => car.id === id)[0].velocity);
     return <div className={styles.modal}>
-        <h4>{name} Won!</h4>
-        <h6>Time: {time}</h6>
+        <h4>{carName} Won!</h4>
+        <h6>Finished In {finishTime} Seconds</h6>
     </div>
 }

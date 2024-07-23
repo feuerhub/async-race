@@ -27,5 +27,19 @@
         .carName {
             margin-top: 1rem;
         }
+        
+    }
+    .drive {
+        animation-name: drive;
+        animation-timing-function:ease-in;
+        animation-fill-mode:forwards;
+    }
+}
+@keyframes drive {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(65rem);
     }
 }

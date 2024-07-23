@@ -62,13 +62,6 @@ const engineState = createSlice({
 
 export default engineState.reducer;
 export const selectAllEngineStatuses = (state: RootState) => state.engine.entities;
-
-
-// export const selectAllRaceReady = createSelector(
-//     [selectAllEngineStatuses],
-//     (engine) => engine.length === 7
-//   )
-//   export const selectAllEnginesStarted = createSelector(
-//     [selectAllEngineStatuses],
-//     (engine) => engine.every(item => item.status === 'started')
-//   )
+export const selectEngineById = (id: number) => { (state: RootState) =>
+    state.engine.entities.find(engine => engine.id === id);
+  };

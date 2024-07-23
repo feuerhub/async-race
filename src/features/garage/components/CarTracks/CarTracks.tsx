@@ -14,6 +14,8 @@ import { startEngine, stopEngine, switchToDrive } from "../../../engine/engineTh
 import styles from './CarTracks.module.css';
 import { selectAllWinners } from "../../../winners/winnersSlice";
 import { addWinner, updateWinner } from "../../../winners/winnersThunk";
+import { selectAllEngineStatuses } from "../../../engine/engineSlice";
+import { Modal } from "../../../../components/Modal/Modal";
 
 export function CarTracks() {
     const [selectedCar, setSelectedCar] = useState<null | number>(null);
@@ -23,9 +25,10 @@ export function CarTracks() {
 
     const dispatch = useDispatch<AppDispatch>();
     const cars = useSelector(selectAllCars);
+    const engines = useSelector(selectAllEngineStatuses);
     const winners = useSelector(selectAllWinners);
     const handleOnClickGenerateCars = () => {
-        const randomCars = generateRandomCars(5);
+    const randomCars = generateRandomCars(5);
         randomCars.forEach(
             car => dispatch(createCar(car))
         );
@@ -41,11 +44,13 @@ export function CarTracks() {
     const handleOnClickRace = () => {
         setWinner(null);
         setRaceStarted(true);
+        handleOnClickReset();
         paginatedCars.forEach(car => dispatch(startEngine(car.id)));
         paginatedCars.forEach(car => dispatch(switchToDrive(car.id)));
     }
     const handleOnClickReset = () => {
-        paginatedCars.forEach(car => dispatch(stopEngine(car.id)));
+        setWinner(null);
+        engines.forEach(engine => dispatch(stopEngine(engine.id)));
     }
     const handleGetWinner = (id: number) => {
         if (!winner && raceStarted) {
@@ -55,11 +60,10 @@ export function CarTracks() {
     }
     const addWinnerToWinners = () => {
         const isWinnerInWinners = winners.some((car) => car.id === winner);
-        console.log(winner)
         if (isWinnerInWinners && winner) {
-            dispatch(updateWinner({id: winner, time: 10, wins: 1}))
+            dispatch(updateWinner({id: winner, time: 10, wins: 1}));
         } else if (!isWinnerInWinners && winner) {
-            dispatch(addWinner({id: winner, time: 10, wins: 1}))
+            dispatch(addWinner({id: winner, time: 10, wins: 1}));
         }
     }
 
@@ -92,6 +96,6 @@ export function CarTracks() {
         </div>
         <h4>Garage ({cars.length})</h4>
         <Pagination page={page} totalPages={totalPages} setPage={setPage} />
-        {winner && <h2>{winner}</h2>}
+        {winner && <Modal id={winner} />}
     </div>;
 }
