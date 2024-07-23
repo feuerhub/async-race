@@ -1,37 +1,12 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
-
-type Winner = {
-    id: number;
-    wins: number;
-    time: number;
-};
-type WinnersState = {
-  entities: Winner[];
-  loading: 'idle' | 'pending' | 'succeeded' | 'failed';
-  error?: string;
-};
+import { addWinner, deleteWinner, getWinners, updateWinner } from './winnersThunk';
+import { Winner, WinnersState } from './winnerType';
 
 const initialState: WinnersState = {
     entities: [],
     loading: 'idle',
 };
-
-export const getWinners = createAsyncThunk<Winner[], void, { state: RootState }>(
-    'winners/getWinners',
-      async function (_, { rejectWithValue }) {
-        try {
-          const response = await fetch('http://127.0.0.1:3000/winners');
-          if (!response.ok) {
-            throw new Error('Server Error!');
-          }
-          const data = await response.json();
-          return data;
-        } catch (error) {
-          return rejectWithValue(error);
-        }
-      }
-    );
 
 const winnersSlice = createSlice({
   name: 'winners',
@@ -47,6 +22,45 @@ const winnersSlice = createSlice({
         state.entities = action.payload;
       });
       builder.addCase(getWinners.rejected, (state, action) => {
+        state.loading = 'failed';
+        state.error = action.payload as string;
+      });
+      builder.addCase(addWinner.pending, (state) => {
+        state.loading = 'pending';
+        state.error = undefined;
+      });
+      builder.addCase(addWinner.fulfilled, (state, action: PayloadAction<Winner>) => {
+        state.loading = 'succeeded';
+        state.entities.push(action.payload);
+      });
+      builder.addCase(addWinner.rejected, (state, action) => {
+        state.loading = 'failed';
+        state.error = action.payload as string;
+      });
+      builder.addCase(updateWinner.pending, (state) => {
+        state.loading = 'pending';
+        state.error = undefined;
+      });
+      builder.addCase(updateWinner.fulfilled, (state, action: PayloadAction<Winner>) => {
+        state.loading = 'succeeded';
+        const index = state.entities.findIndex(item => item.id === action.payload.id);
+        if (index !== -1) {
+          state.entities[index] = action.payload;
+        }
+      });
+      builder.addCase(updateWinner.rejected, (state, action) => {
+        state.loading = 'failed';
+        state.error = action.payload as string;
+      });
+      builder.addCase(deleteWinner.pending, (state) => {
+        state.loading = 'pending';
+        state.error = undefined;
+      });
+      builder.addCase(deleteWinner.fulfilled, (state, action: PayloadAction<number>) => {
+        state.loading = 'succeeded';
+        state.entities.filter(winner => winner.id !== action.payload);
+      });
+      builder.addCase(deleteWinner.rejected, (state, action) => {
         state.loading = 'failed';
         state.error = action.payload as string;
       });

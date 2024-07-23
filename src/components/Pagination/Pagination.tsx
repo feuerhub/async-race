@@ -1,6 +1,8 @@
 import { Dispatch, SetStateAction } from "react";
 import { Button } from "../Button/Button";
 
+import styles from './Pagination.module.css';
+
 type PaginationProps = {
     page: number,
     totalPages: number,
@@ -42,7 +44,7 @@ export function Pagination({page, totalPages, setPage}: PaginationProps) {
             break;
         }
       };
-    return <div>
+    return <div className={styles.pagination}>
         <Button btnText='<<' type='button' onClick={() => handleOnClickPage('first')} disabled={page===1} />
         <Button btnText='<' type='button' onClick={() => handleOnClickPage('prev')} disabled={page===1} />
         <p>{page} Page</p>

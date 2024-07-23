@@ -1,6 +1,6 @@
-import { createSelector, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { EngineState } from './engineTypes';
-import { startStopEngine, switchToDriveMode } from './engineThunks';
+import { startEngine, stopEngine, switchToDrive } from './engineThunks';
 import { RootState } from '../../app/store';
 
 const initialState: EngineState = {
@@ -13,39 +13,47 @@ const engineState = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(startStopEngine.pending, (state) => {
+    builder.addCase(startEngine.pending, (state) => {
         state.loading = 'pending';
         state.error = undefined;
       });
-      builder.addCase(startStopEngine.fulfilled, (state, action) => {
+      builder.addCase(startEngine.fulfilled, (state, action) => {
         state.loading = 'succeeded';
-        if (action.payload.status === 'stopped') {
-            state.entities = state.entities.filter(engine => engine.id !== action.payload.data.id);
+        const index = state.entities.findIndex(engine => engine.id === action.payload.id);
+        if (index !== -1) {
+            state.entities[index] = action.payload;
         } else {
-            const index = state.entities.findIndex(engine => engine.id === action.payload.data.id);
-            if (index !== -1) {
-                state.entities[index] = {...action.payload.data, status: 'started'};
-            } else {
-                state.entities.push({...action.payload.data, status: 'started'});
-            }
+            state.entities.push(action.payload);
         }
     });
-      builder.addCase(startStopEngine.rejected, (state, action) => {
+      builder.addCase(startEngine.rejected, (state, action) => {
         state.loading = 'failed';
         state.error = action.payload as string;
       });
-      builder.addCase(switchToDriveMode.pending, (state) => {
+      builder.addCase(stopEngine.pending, (state) => {
         state.loading = 'pending';
         state.error = undefined;
       });
-      builder.addCase(switchToDriveMode.fulfilled, (state, action) => {
+      builder.addCase(stopEngine.fulfilled, (state, action) => {
+        state.loading = 'succeeded';
+        state.entities = state.entities.filter(engine => engine.id !== action.payload);
+    });
+      builder.addCase(stopEngine.rejected, (state, action) => {
+        state.loading = 'failed';
+        state.error = action.payload as string;
+      });
+      builder.addCase(switchToDrive.pending, (state) => {
+        state.loading = 'pending';
+        state.error = undefined;
+      });
+      builder.addCase(switchToDrive.fulfilled, (state, action) => {
         state.loading = 'succeeded';
         const index = state.entities.findIndex(engine => engine.id === action.payload.id);
             if (index !== -1) {
-                state.entities[index].status = action.payload.drive;
+                state.entities[index].status = action.payload.status;
             }
     });
-      builder.addCase(switchToDriveMode.rejected, (state, action) => {
+      builder.addCase(switchToDrive.rejected, (state, action) => {
         state.loading = 'failed';
         state.error = action.payload as string;
       });
@@ -55,10 +63,11 @@ const engineState = createSlice({
 export default engineState.reducer;
 export const selectAllEngineStatuses = (state: RootState) => state.engine.entities;
 
-export const selectAllRaceReady = createSelector(
-    [selectAllEngineStatuses],
-    (engine) => engine.every(item => item.status === 'drive' || 'broke')
-  )
+
+// export const selectAllRaceReady = createSelector(
+//     [selectAllEngineStatuses],
+//     (engine) => engine.length === 7
+//   )
 //   export const selectAllEnginesStarted = createSelector(
 //     [selectAllEngineStatuses],
 //     (engine) => engine.every(item => item.status === 'started')

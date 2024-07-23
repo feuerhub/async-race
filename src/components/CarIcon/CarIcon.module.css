@@ -6,24 +6,13 @@
         transform: translateX(65vw);
     }
 }
-@keyframes broke {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(15vw);
-    }
-}
 .car {
     animation-fill-mode: forwards;
 }
 .car.drive {
     animation-name: drive;
 }
-.car.broke {
-    animation-name: broke;
-}
-.car.broke::after {
-    content: "Engine Is Broken";
+.car.broken {
+    animation-play-state: paused;
 }
 

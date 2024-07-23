@@ -1,19 +1,25 @@
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCarSide  } from '@fortawesome/free-solid-svg-icons';
+import { faCarSide, faCarBurst  } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './CarIcon.module.css';
 
 type CarIconProps = {
     color: string,
     velocity?: number,
-    drive?: "started" | "broke" | "drive"
+    engineStatus?: 'started' | 'drive' | 'broken',
+    id?: number,
+    handleCarFinished?: (id: number) => void,
 }
 
-export function CarIcon({ color, velocity, drive }: CarIconProps) {
+export function CarIcon({ color, velocity, engineStatus, id, handleCarFinished }: CarIconProps) {
     const cx = classNames.bind(styles);
-    const animationDurationStyle = drive ? {
-        animationDuration: `${velocity && velocity*50}ms`,
+    const animationStyle = engineStatus ? {
+        animationDuration: velocity ? `${500000 / velocity}ms` : undefined
       } : {};
-    return <FontAwesomeIcon className={cx('car', drive)} style={animationDurationStyle} icon={faCarSide} color={color} />;
+    return <FontAwesomeIcon 
+    onAnimationEnd={() => (handleCarFinished && id) && handleCarFinished(id)} 
+    className={cx('car', engineStatus && 'drive', engineStatus === 'broken' && 'broken')} 
+    style={animationStyle} icon={engineStatus === 'broken' ? faCarBurst : faCarSide } 
+    color={color} />;
 }
