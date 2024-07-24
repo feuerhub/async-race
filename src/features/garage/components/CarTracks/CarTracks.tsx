@@ -30,7 +30,7 @@ export function CarTracks() {
     const winners = useSelector(selectAllWinners);
     
     const handleOnClickGenerateCars = () => {
-        const randomCars = generateRandomCars(5);
+        const randomCars = generateRandomCars(100);
         randomCars.forEach(
             car => dispatch(createCar(car))
         );
