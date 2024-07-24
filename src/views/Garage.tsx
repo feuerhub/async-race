@@ -1,9 +1,11 @@
-import { CarTracks } from "../features/garage/components/CarTracks/CarTracks";
+import { CarTracks } from '../features/garage/components/CarTracks/CarTracks';
 
 import styles from './Garage.module.css';
 
 export function Garage() {
-    return <main className={styles.garage}>
-        <CarTracks />
-    </main>;
+  return (
+    <main className={styles.garage}>
+      <CarTracks />
+    </main>
+  );
 }

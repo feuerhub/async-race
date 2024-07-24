@@ -1,7 +1,7 @@
 export type Engine = {
-    id: number;
-    velocity: number;
-    status: 'drive' | 'broken' | 'started';
+  id: number;
+  velocity: number;
+  status: 'drive' | 'broken' | 'started';
 };
 export type EngineState = {
   entities: Engine[];

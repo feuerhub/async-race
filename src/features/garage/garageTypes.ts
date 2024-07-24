@@ -1,7 +1,7 @@
 export type Car = {
-    name: string;
-    color: string;
-    id: number;
+  name: string;
+  color: string;
+  id: number;
 };
 export type GarageState = {
   entities: Car[];

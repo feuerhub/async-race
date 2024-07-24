@@ -7,8 +7,8 @@ export const store = configureStore({
   reducer: {
     garage: garageReducer,
     winners: winnersReducer,
-    engine: engineSlice
-  }
+    engine: engineSlice,
+  },
 });
 
 export type AppDispatch = typeof store.dispatch;
