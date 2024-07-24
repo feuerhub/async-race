@@ -1,4 +1,4 @@
-## link to the deployed solution: 
+## link to the deployed solution: https://feuerhub.github.io/async-race/
 
 ## Checklist 370/400 pts
 
