@@ -14,3 +14,8 @@
         font-weight: bold;
     }
 }
+@media only screen and (max-width: 1200px) {
+    .header {
+        padding: 1rem 2rem;
+    }
+  }
