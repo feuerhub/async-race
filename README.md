@@ -1,4 +1,6 @@
-## Checklist 360/400 pts. Deployed App Link: ...
+## link to the deployed solution: 
+
+## Checklist 370/400 pts
 
 ## 🚀 UI Deployment
 
