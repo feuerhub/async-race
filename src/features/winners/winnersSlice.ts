@@ -76,7 +76,6 @@ const winnersSlice = createSlice({
       deleteWinner.fulfilled,
       (state, action: PayloadAction<number>) => {
         state.loading = 'succeeded';
-        console.log(action.payload);
         state.entities = state.entities.filter(
           (winner) => winner.id !== action.payload,
         );
