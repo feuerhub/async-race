@@ -81,6 +81,7 @@ export function CarTracks() {
     const totalPages = Math.ceil(cars.length / itemsPerPage);
     const startIndex = (page-1) * itemsPerPage;
     const paginatedCars = cars.slice(startIndex, startIndex + itemsPerPage); 
+    paginatedCars.length === 0 && setPage(page-1);
 
     return <div className={styles.carTracks}>
         <div className={styles.btnPanel}>
@@ -88,11 +89,11 @@ export function CarTracks() {
                 <Button btnText="RACE" type="button" onClick={handleOnClickRace} disabled={raceStarted} />
                 <Button btnText="RESET" type="button" onClick={handleOnClickReset} />
             </div>
-            <CreateCarForm />
-            <UpdateCarForm selectedCar={selectedCar} />
+            <CreateCarForm raceStarted={raceStarted} />
+            <UpdateCarForm raceStarted={raceStarted} selectedCar={selectedCar} />
             <Button btnText="GENERATE CARS" type="button" onClick={handleOnClickGenerateCars} />
         </div>
-        <h4>Garage ({cars.length})</h4>
+        <h4>Garage ({cars.length > 0 ? cars.length : 'No Cars'})</h4>
         <div>
             {paginatedCars.map(car => 
             <CarTrack 

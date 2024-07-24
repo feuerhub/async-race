@@ -10,13 +10,14 @@ type FormProps = {
     colorValue: string,
     onSubmit: FormEventHandler<HTMLFormElement>,
     onInputText: FormEventHandler<HTMLInputElement>,
-    onInputColor: FormEventHandler<HTMLInputElement>
+    onInputColor: FormEventHandler<HTMLInputElement>,
+    disabled: boolean
  }
 
-export function Form({ inputPlaceholder, btnText, textValue, colorValue, onSubmit, onInputColor, onInputText }: FormProps) {
+export function Form({ inputPlaceholder, btnText, textValue, colorValue, onSubmit, onInputColor, onInputText, disabled }: FormProps) {
     return <form onSubmit={onSubmit} className={styles.form}>
         <input type="text" placeholder={inputPlaceholder} value={textValue} onInput={onInputText}></input>
         <input className={styles.colorPicker} type="color" value={colorValue} onInput={onInputColor} />
-        <Button btnText={btnText} type='submit' />
+        <Button btnText={btnText} type='submit' disabled={disabled} />
     </form>;
 }

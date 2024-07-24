@@ -5,10 +5,11 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../../app/store';
 
 type UpdateCarFormProps = {
-  selectedCar: number | null
+  selectedCar: number | null,
+  raceStarted: boolean
 }
 
-export function UpdateCarForm({selectedCar}: UpdateCarFormProps) {
+export function UpdateCarForm({selectedCar, raceStarted}: UpdateCarFormProps) {
   const [carUpdateText, setCarUpdateText] = useState('');
   const [carUpdateColor, setCarUpdateColor] = useState('#000000');
 
@@ -16,7 +17,7 @@ export function UpdateCarForm({selectedCar}: UpdateCarFormProps) {
 
   const handleUpdateCar: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    if (carUpdateText && selectedCar) {
+    if (carUpdateText && carUpdateText.length < 15 && selectedCar) {
         dispatch(updateCar({carId: selectedCar, carData: {name: carUpdateText, color: carUpdateColor}}));
         setCarUpdateText('');
         setCarUpdateColor('#000000');
@@ -40,6 +41,7 @@ export function UpdateCarForm({selectedCar}: UpdateCarFormProps) {
       onInputText={handleInputText}
       colorValue={carUpdateColor}
       onInputColor={handleInputColor}
+      disabled={!carUpdateText || carUpdateText.length > 15 || !selectedCar || raceStarted}
     />
   );
 }
