@@ -63,7 +63,7 @@ export function CarTracks() {
     const addWinnerToWinners = () => {
         const isWinnerInWinners = winners.some((car) => car.id === winner);
         let finishTime = engines.find(engine => engine.id === winner)?.velocity;
-        finishTime = finishTime ? Math.round(1500 / finishTime) : 0;
+        finishTime = finishTime ? parseFloat((1000 / finishTime).toFixed(2)) : 0;
         if (isWinnerInWinners && winner) {
             dispatch(updateWinner({id: winner, time: finishTime, wins: 1}));
         } else if (!isWinnerInWinners && winner) {
@@ -72,7 +72,7 @@ export function CarTracks() {
     }
 
     useEffect(() => {
-        addWinnerToWinners();
+        winner && addWinnerToWinners();
       }, [winner]);
 
     const itemsPerPage = 7;
@@ -90,6 +90,7 @@ export function CarTracks() {
             <UpdateCarForm selectedCar={selectedCar} />
             <Button btnText="GENERATE CARS" type="button" onClick={handleOnClickGenerateCars} />
         </div>
+        <h4>Garage ({cars.length})</h4>
         <div>
             {paginatedCars.map(car => 
             <CarTrack 
@@ -102,7 +103,6 @@ export function CarTracks() {
             onClickSelect={() => setSelectedCar(car.id)}
             handleOnClickEngine={handleOnClickEngine} />)}
         </div>
-        <h4>Garage ({cars.length})</h4>
         <Pagination page={page} totalPages={totalPages} setPage={setPage} />
         {winner && <Modal id={winner} />}
     </div>;

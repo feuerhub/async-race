@@ -39,7 +39,7 @@ export function CarTrack({ id, name, color, selected, onClickSelect, handleOnCli
                     <div 
                     onAnimationEnd={() => (handleCarFinished(id))}  
                     className={carEngine && styles.drive} 
-                    style={carEngine?.status === 'broken' ? {animationDuration: `${1500 / carEngine.velocity}s`, animationPlayState: "paused"} : carEngine && {animationDuration: `${1500 / carEngine.velocity}s`}}>
+                    style={carEngine?.status === 'broken' ? {animationDuration: `${1000 / carEngine.velocity}s`, animationPlayState: "paused"} : carEngine && {animationDuration: `${1000 / carEngine.velocity}s`}}>
                         <CarIcon color={color} />
                     </div>
                 </div>

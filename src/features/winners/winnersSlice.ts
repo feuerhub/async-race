@@ -58,7 +58,8 @@ const winnersSlice = createSlice({
       });
       builder.addCase(deleteWinner.fulfilled, (state, action: PayloadAction<number>) => {
         state.loading = 'succeeded';
-        state.entities.filter(winner => winner.id !== action.payload);
+        console.log(action.payload);
+        state.entities = state.entities.filter(winner => winner.id !== action.payload);
       });
       builder.addCase(deleteWinner.rejected, (state, action) => {
         state.loading = 'failed';
