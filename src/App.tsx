@@ -20,9 +20,9 @@ export function App() {
     <div className={styles.app}>
       <Header />
       <Routes>
-        <Route path="/garage" element={<Garage />} />
+        <Route path="/" element={<Garage />} />
         <Route path="/winners" element={<Winners />} />
-        <Route path="*" element={<Navigate to="/garage" />} />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </div>
   );
