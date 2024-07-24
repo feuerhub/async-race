@@ -61,12 +61,14 @@ export function CarTracks() {
         }
     }
     const addWinnerToWinners = () => {
-        const isWinnerInWinners = winners.some((car) => car.id === winner);
+        const winnerInWinners = winners.find((car) => car.id === winner);
         let finishTime = engines.find(engine => engine.id === winner)?.velocity;
         finishTime = finishTime ? parseFloat((1000 / finishTime).toFixed(2)) : 0;
-        if (isWinnerInWinners && winner) {
-            dispatch(updateWinner({id: winner, time: finishTime, wins: 1}));
-        } else if (!isWinnerInWinners && winner) {
+        if (winnerInWinners && winner) {
+            const wins = winnerInWinners.wins + 1;
+            const time = winnerInWinners.time > finishTime ? finishTime : winnerInWinners.time ;
+            dispatch(updateWinner({id: winner, time: time, wins: wins}));
+        } else if (!winnerInWinners && winner) {
             dispatch(addWinner({id: winner, time: finishTime, wins: 1}));
         }
     }
@@ -101,7 +103,8 @@ export function CarTracks() {
             color={car.color} 
             selected={selectedCar === car.id} 
             onClickSelect={() => setSelectedCar(car.id)}
-            handleOnClickEngine={handleOnClickEngine} />)}
+            handleOnClickEngine={handleOnClickEngine}
+            raceStarted={raceStarted} />)}
         </div>
         <Pagination page={page} totalPages={totalPages} setPage={setPage} />
         {winner && <Modal id={winner} />}

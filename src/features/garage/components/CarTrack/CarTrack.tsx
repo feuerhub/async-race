@@ -13,13 +13,14 @@ type CarTrackProps = {
     id: number,
     name: string, 
     color: string,
-    selected: boolean,
+    selected: boolean
     onClickSelect: () => void,
     handleOnClickEngine: (engine: "start" | "stop", id: number) => void,
-    handleCarFinished: (id: number) => void
+    handleCarFinished: (id: number) => void,
+    raceStarted: boolean
 }
 
-export function CarTrack({ id, name, color, selected, onClickSelect, handleOnClickEngine, handleCarFinished }: CarTrackProps) {
+export function CarTrack({ id, name, color, selected, onClickSelect, handleOnClickEngine, handleCarFinished, raceStarted }: CarTrackProps) {
     const cx = classNames.bind(styles);
     const dispatch = useDispatch<AppDispatch>();
     const engineStatuses = useSelector(selectAllEngineStatuses);
@@ -31,12 +32,12 @@ export function CarTrack({ id, name, color, selected, onClickSelect, handleOnCli
     return <div className={styles.carTrack}>
                 <div className={styles.leftContainer}>
                     <div className={styles.btnContainer}>
-                        <Button btnText="SELECT" type="button" onClick={onClickSelect} disabled={selected} />
-                        <Button btnText="REMOVE" type="button" onClick={handleClickDelete} />
+                        <Button btnText="SELECT" type="button" onClick={onClickSelect} disabled={selected || raceStarted} />
+                        <Button btnText="REMOVE" type="button" onClick={handleClickDelete} disabled={raceStarted} />
                     </div>
                     <div className={styles.btnContainer}>
                         <Button btnText="A" type="button" onClick={() => handleOnClickEngine('start', id)} disabled={carEngine && true} />
-                        <Button btnText="B" type="button" onClick={() => handleOnClickEngine('stop', id)} disabled={!carEngine && true} />
+                        <Button btnText="B" type="button" onClick={() => handleOnClickEngine('stop', id)} disabled={(!carEngine || raceStarted) && true} />
                     </div>
                     
                 </div>
