@@ -1,13 +1,14 @@
 .button {
     background: none;
-    border: 0.2rem solid green;
+    cursor: pointer;
+    border: 1px dotted rgb(128, 185, 255);
     padding: 0.5rem;
     color: var(--font-color);
     &:disabled {
-        border: 0.2rem solid gray;
+        border: 1px solid gray;
         color: gray;
     }
     &:hover {
-        border: 0.2rem solid gray;
+        border: 1px solid gray;
     }
 }

@@ -1,18 +1,1 @@
-/* @keyframes drive {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(65rem);
-    }
-}
-.car {
-    animation-fill-mode: forwards;
-}
-.car.drive {
-    animation-name: drive;
-}
-.car.broken {
-    animation-play-state: paused;
-}
- */
+
