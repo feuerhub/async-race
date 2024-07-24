@@ -17,15 +17,28 @@
         }
     }
     .trackroad {
+        position: relative;
         width: 100%;
+        overflow: hidden;
         display: flex;
         justify-content: space-between;
         align-items: start;
         p {
             color: gray;
         }
+        .carNameBlock {
+            margin-left: 6rem;
+        }
         .carName {
             margin-top: 1rem;
+        }
+        .singleCar {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            & > svg {
+                height: 4rem;
+            }
         }
         
     }
@@ -36,10 +49,11 @@
     }
 }
 @keyframes drive {
-    0% {
-        transform: translateX(0);
+    from {
+        left: 0;
     }
-    100% {
-        transform: translateX(65rem);
+    to {
+        left: 100%;
+        transform: translate(-100%, -50%);
     }
 }
