@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { Form } from '../../../../components/';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUpdateCarColor, selectUpdateCarName, setUpdateCarColor, setUpdateCarName } from '../../../userInputs/userInputs';
 import { updateCar } from '../../garageThunks';
-import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../../app/store';
+import { Form } from '../../../../components/';
 
 type UpdateCarFormProps = {
   selectedCar: number | null;
@@ -13,31 +13,30 @@ export function UpdateCarForm({
   selectedCar,
   raceStarted,
 }: UpdateCarFormProps) {
-  const [carUpdateText, setCarUpdateText] = useState('');
-  const [carUpdateColor, setCarUpdateColor] = useState('#000000');
-
+  const updateCarName = useSelector(selectUpdateCarName);
+  const updateCarColor = useSelector(selectUpdateCarColor);
   const dispatch = useDispatch<AppDispatch>();
 
   const handleUpdateCar: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    if (carUpdateText && carUpdateText.length < 15 && selectedCar) {
+    if (updateCarName && updateCarName.length < 15 && selectedCar) {
       dispatch(
         updateCar({
           carId: selectedCar,
-          carData: { name: carUpdateText, color: carUpdateColor },
+          carData: { name: updateCarName, color: updateCarColor },
         }),
       );
-      setCarUpdateText('');
-      setCarUpdateColor('#000000');
+      dispatch(setUpdateCarName(''));
+      dispatch(setUpdateCarColor('#000000'));
     }
   };
 
   const handleInputText: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setCarUpdateText(e.target.value);
+    dispatch(setUpdateCarName(e.target.value));
   };
 
   const handleInputColor: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setCarUpdateColor(e.target.value);
+    dispatch(setUpdateCarColor(e.target.value));
   };
 
   return (
@@ -45,13 +44,13 @@ export function UpdateCarForm({
       inputPlaceholder="Type Car Brand"
       btnText="UPDATE"
       onSubmit={handleUpdateCar}
-      textValue={carUpdateText}
+      textValue={updateCarName}
       onInputText={handleInputText}
-      colorValue={carUpdateColor}
+      colorValue={updateCarColor}
       onInputColor={handleInputColor}
       disabled={
-        !carUpdateText ||
-        carUpdateText.length > 15 ||
+        !updateCarName ||
+        updateCarName.length > 15 ||
         !selectedCar ||
         raceStarted
       }

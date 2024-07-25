@@ -1,30 +1,29 @@
-import { useState } from 'react';
-import { Form } from '../../../../components/';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCreateCarColor, selectCreateCarName, setCreateCarColor, setCreateCarName } from '../../../userInputs/userInputs';
 import { createCar } from '../../garageThunks';
 import { AppDispatch } from '../../../../app/store';
+import { Form } from '../../../../components/';
 
 export function CreateCarForm({ raceStarted }: { raceStarted: boolean }) {
-  const [carCreateText, setCarCreateText] = useState('');
-  const [carCreateColor, setCarCreateColor] = useState('#000000');
-
+  const createCarName = useSelector(selectCreateCarName);
+  const createCarColor = useSelector(selectCreateCarColor);
   const dispatch = useDispatch<AppDispatch>();
 
   const handleCreateCar: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    if (carCreateText && carCreateText.length < 15) {
-      dispatch(createCar({ name: carCreateText, color: carCreateColor }));
-      setCarCreateText('');
-      setCarCreateColor('#000000');
+    if (createCarName && createCarName.length < 15) {
+      dispatch(createCar({ name: createCarName, color: createCarColor }));
+      dispatch(setCreateCarName(''));
+      dispatch(setCreateCarColor('#000000'));
     }
   };
 
   const handleInputText: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setCarCreateText(e.target.value);
+    dispatch(setCreateCarName(e.target.value));
   };
 
   const handleInputColor: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setCarCreateColor(e.target.value);
+    dispatch(setCreateCarColor(e.target.value));
   };
 
   return (
@@ -32,11 +31,11 @@ export function CreateCarForm({ raceStarted }: { raceStarted: boolean }) {
       inputPlaceholder="Type Car Brand"
       btnText="CREATE"
       onSubmit={handleCreateCar}
-      textValue={carCreateText}
+      textValue={createCarName}
       onInputText={handleInputText}
-      colorValue={carCreateColor}
+      colorValue={createCarColor}
       onInputColor={handleInputColor}
-      disabled={!carCreateText || carCreateText.length > 15 || raceStarted}
+      disabled={!createCarName || createCarName.length > 15 || raceStarted}
     />
   );
 }
