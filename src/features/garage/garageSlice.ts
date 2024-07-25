@@ -97,14 +97,11 @@ export default garageSlice.reducer;
 export const { setCarsPage } = garageSlice.actions;
 
 export const selectAllCars = (state: RootState) => state.garage.entities;
-export const selectTotalCars = (state: RootState) => state.garage.entities.length;
+export const selectTotalCars = (state: RootState) => state.garage.entities.length === 0 ? 1 : state.garage.entities.length;
 export const selectCurrentCarsPage = (state: RootState) => state.garage.currentPage;
 export const selectCarsPerPage = (state: RootState) => state.garage.itemsPerPage;
 
 export const selectTotalCarsPages = (state: RootState) => {
-  if (state.garage.entities.length === 0) {
-    return 1;
-  }  
   const { itemsPerPage, entities } = state.garage;
   return Math.ceil(entities.length / itemsPerPage);
 };

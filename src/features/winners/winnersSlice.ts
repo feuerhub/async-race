@@ -108,13 +108,10 @@ export default winnersSlice.reducer;
 export const { setWinnersPage, setSortBy, setSortDirection } = winnersSlice.actions;
 
 export const selectAllWinners = (state: RootState) => state.winners.entities;
-export const selectTotalWinners = (state: RootState) => state.winners.entities.length;
+export const selectTotalWinners = (state: RootState) => state.winners.entities.length === 0 ? 1 : state.winners.entities.length;
 export const selectCurrentWinnersPage = (state: RootState) => state.winners.currentPage;
 
 export const selectTotalWinnersPages = (state: RootState) => {
-  if (state.winners.entities.length === 0) {
-    return 1;
-  }  
   const { itemsPerPage, entities } = state.winners;
   return Math.ceil(entities.length / itemsPerPage);
 };
