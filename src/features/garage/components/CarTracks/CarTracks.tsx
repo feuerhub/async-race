@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { CarTrack } from '../CarTrack/CarTrack';
-import { selectAllCars } from '../../garageSlice';
+import { selectAllCars, selectCarsPerPage, selectCurrentCarsPage } from '../../garageSlice';
 import { Button } from '../../../../components';
 import { generateRandomCars } from '../../../../utils/generateRandomCars';
 import { AppDispatch } from '../../../../app/store';
@@ -11,7 +11,7 @@ import { UpdateCarForm } from '../UpdateCarForm/UpdateCarForm';
 import { selectAllWinners } from '../../../winners/winnersSlice';
 import { addWinner, updateWinner } from '../../../winners/winnersThunk';
 import { selectAllEngineStatuses } from '../../../engine/engineSlice';
-import { Modal, Pagination } from '../../../../components/';
+import { Modal } from '../../../../components/';
 import {
   startEngine,
   stopEngine,
@@ -23,15 +23,16 @@ import styles from './CarTracks.module.css';
 
 export function CarTracks() {
   const [selectedCar, setSelectedCar] = useState<null | number>(null);
-  const [page, setPage] = useState<number>(1);
   const [winner, setWinner] = useState<null | number>(null);
   const [raceStarted, setRaceStarted] = useState<boolean>(false);
 
   const dispatch = useDispatch<AppDispatch>();
-
-  const cars = useSelector(selectAllCars);
   const engines = useSelector(selectAllEngineStatuses);
   const winners = useSelector(selectAllWinners);
+  const cars = useSelector(selectAllCars);
+  const currentPage = useSelector(selectCurrentCarsPage);
+  const carsPerPage = useSelector(selectCarsPerPage);
+  const paginatedCars = cars.slice((currentPage-1)*carsPerPage, (currentPage-1)*carsPerPage + carsPerPage);
 
   const handleOnClickGenerateCars = () => {
     const randomCars = generateRandomCars(100);
@@ -65,7 +66,7 @@ export function CarTracks() {
   const addWinnerToWinners = () => {
     const winnerInWinners = winners.find((car) => car.id === winner);
     let finishTime = engines.find((engine) => engine.id === winner)?.velocity;
-    finishTime = finishTime ? parseFloat((1000 / finishTime).toFixed(2)) : 0;
+    finishTime = finishTime ? parseFloat((2000 / finishTime).toFixed(2)) : 0;
     if (winnerInWinners && winner) {
       const wins = winnerInWinners.wins + 1;
       const time =
@@ -79,18 +80,6 @@ export function CarTracks() {
   useEffect(() => {
     winner && addWinnerToWinners();
   }, [winner]);
-  
-
-  const itemsPerPage = 7;
-  const totalPages = Math.ceil(cars.length / itemsPerPage);
-  const startIndex = (page - 1) * itemsPerPage;
-  const paginatedCars = cars.slice(startIndex, startIndex + itemsPerPage);
-  useEffect(() => {
-    if (paginatedCars.length === 0 && page > 1) {
-      setPage(page - 1);
-    }
-  }, [paginatedCars, page]);
-  
 
   return (
     <div className={styles.carTracks}>
@@ -112,7 +101,6 @@ export function CarTracks() {
           onClick={handleOnClickGenerateCars}
         />
       </div>
-      <h4>Garage ({cars.length > 0 ? cars.length : 'No Cars'})</h4>
       <div>
         {paginatedCars.map((car) => (
           <CarTrack
@@ -128,7 +116,6 @@ export function CarTracks() {
           />
         ))}
       </div>
-      <Pagination page={page} totalPages={totalPages} setPage={setPage} />
       {winner && <Modal id={winner} />}
     </div>
   );

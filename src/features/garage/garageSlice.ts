@@ -6,12 +6,18 @@ import { Car, GarageState } from './garageTypes';
 const initialState: GarageState = {
   entities: [],
   loading: 'idle',
+  currentPage: 1,
+  itemsPerPage: 10,
 };
 
 const garageSlice = createSlice({
   name: 'garage',
   initialState,
-  reducers: {},
+  reducers: {
+    setCarsPage: (state, action: PayloadAction<number>) => {
+      state.currentPage = action.payload;
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(getCars.pending, (state) => {
       state.loading = 'pending';
@@ -74,6 +80,10 @@ const garageSlice = createSlice({
         state.entities = state.entities.filter(
           (car) => car.id !== action.payload,
         );
+        const totalPages = Math.ceil(state.entities.length / state.itemsPerPage);
+        if (state.currentPage > totalPages) {
+          state.currentPage = totalPages;
+        }
       },
     );
     builder.addCase(deleteCar.rejected, (state, action) => {
@@ -84,4 +94,15 @@ const garageSlice = createSlice({
 });
 
 export default garageSlice.reducer;
+export const { setCarsPage } = garageSlice.actions;
+
 export const selectAllCars = (state: RootState) => state.garage.entities;
+export const selectTotalCars = (state: RootState) => state.garage.entities.length;
+export const selectCurrentCarsPage = (state: RootState) => state.garage.currentPage;
+export const selectCarsPerPage = (state: RootState) => state.garage.itemsPerPage;
+
+export const selectTotalCarsPages = (state: RootState) => {
+  const { itemsPerPage, entities } = state.garage;
+  return Math.ceil(entities.length / itemsPerPage);
+};
+

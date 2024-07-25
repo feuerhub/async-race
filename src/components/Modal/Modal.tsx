@@ -8,7 +8,7 @@ export function Modal({ id }: { id: number }) {
     .name;
   const finishTime = parseFloat(
     (
-      1000 /
+      2000 /
       useSelector(selectAllEngineStatuses).filter((car) => car.id === id)[0]
         .velocity
     ).toFixed(2),

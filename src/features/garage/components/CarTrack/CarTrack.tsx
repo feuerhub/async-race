@@ -37,6 +37,7 @@ export function CarTrack({
   const handleClickDelete = () => {
     dispatch(deleteCar(id));
     dispatch(deleteWinner(id));
+    
   };
   return (
     <div className={styles.carTrack}>
@@ -77,11 +78,11 @@ export function CarTrack({
           style={
             carEngine?.status === 'broken'
               ? {
-                  animationDuration: `${1000 / carEngine.velocity}s`,
+                  animationDuration: `${2000 / carEngine.velocity}s`,
                   animationPlayState: 'paused',
                 }
               : carEngine && {
-                  animationDuration: `${1000 / carEngine.velocity}s`,
+                  animationDuration: `${2000 / carEngine.velocity}s`,
                 }
           }
         >
@@ -91,6 +92,7 @@ export function CarTrack({
           <p>START</p>
           <h4 className={styles.carName}>{name}</h4>
         </div>
+        <h4 className={styles.carName}>{carEngine?.status === 'broken' && 'Engine Is Broken'}</h4>
         <p>FINISH</p>
       </div>
     </div>

@@ -6,7 +6,7 @@ import styles from './Pagination.module.css';
 type PaginationProps = {
   page: number;
   totalPages: number;
-  setPage: Dispatch<SetStateAction<number>>;
+  setPage: (page: number) => void;
 };
 
 export function Pagination({ page, totalPages, setPage }: PaginationProps) {
