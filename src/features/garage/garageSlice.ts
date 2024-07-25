@@ -102,6 +102,9 @@ export const selectCurrentCarsPage = (state: RootState) => state.garage.currentP
 export const selectCarsPerPage = (state: RootState) => state.garage.itemsPerPage;
 
 export const selectTotalCarsPages = (state: RootState) => {
+  if (state.garage.entities.length === 0) {
+    return 1;
+  }  
   const { itemsPerPage, entities } = state.garage;
   return Math.ceil(entities.length / itemsPerPage);
 };

@@ -110,27 +110,11 @@ export const { setWinnersPage, setSortBy, setSortDirection } = winnersSlice.acti
 export const selectAllWinners = (state: RootState) => state.winners.entities;
 export const selectTotalWinners = (state: RootState) => state.winners.entities.length;
 export const selectCurrentWinnersPage = (state: RootState) => state.winners.currentPage;
-// export const selectPaginatedWinners = (state: RootState) => {
-//   const { currentPage, itemsPerPage, entities } = state.winners;
-//   const startIndex = (currentPage - 1) * itemsPerPage;
-//   const endIndex = startIndex + itemsPerPage;
-//   return entities.slice(startIndex, endIndex);
-// };
-// export const selectPaginatedWinners = (state: RootState) => {
-//   const { currentPage, itemsPerPage, entities, sortBy, sortDirection } = state.winners;
-//   const sortedEntities = (sortBy && sortDirection) ? [...entities].sort((a, b) => {
-//     if (sortBy === 'wins') {
-//       return sortDirection === 'asc' ? a.wins - b.wins : b.wins - a.wins;
-//     } else {
-//       return sortDirection === 'asc' ? a.time - b.time : b.time - a.time;
-//     }
-//   }) : [...entities];
-//   const startIndex = (currentPage - 1) * itemsPerPage;
-//   const endIndex = startIndex + itemsPerPage;
-//   return sortedEntities.slice(startIndex, endIndex);
-// };
 
 export const selectTotalWinnersPages = (state: RootState) => {
+  if (state.winners.entities.length === 0) {
+    return 1;
+  }  
   const { itemsPerPage, entities } = state.winners;
   return Math.ceil(entities.length / itemsPerPage);
 };
